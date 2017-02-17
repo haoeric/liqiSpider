@@ -1,6 +1,7 @@
 import scrapy
 
 class liqiItem(scrapy.Item):
+    source = scrapy.Field()
     title = scrapy.Field()
     date = scrapy.Field()
     tools = scrapy.Field()
@@ -17,15 +18,13 @@ class LiqiSpider(scrapy.Spider):
 
     def parse(self, response):
         links = response.css("div.clean-my-archives ul li a::attr(href)").extract()
-        thefile = open('sources.txt', 'w')
         for link in links:
-            thefile.write("%s\n" % link)
             request = scrapy.Request(url=link, callback=self.parseLink)
             yield request
-        thefile.close()
 
     def parseLink(self, response):
         item = liqiItem()
+        item['source'] = response.url
         post = response.css('main.site-main div.container article')
         item['title'] = post.css("header.entry-header h1.entry-title::text").extract()
             

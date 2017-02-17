@@ -1,6 +1,5 @@
 setwd("~/GitProject/liqiSpider")
 d <- read.csv("liqi.csv", header = TRUE, stringsAsFactors = FALSE)
-s <- read.table("sources.txt", stringsAsFactors = FALSE, header = FALSE)[,1]
 
 for(i in seq_len(nrow(d))){
     cat(i)
@@ -58,7 +57,7 @@ for(i in seq_len(nrow(d))){
                           tools = tools,
                           links = links,
                           date = rep(date, length(tools)),
-                          source = rep(s[i], length(tools)))
+                          source = rep(d$source[i], length(tools)))
         
         if(i == 1){
             df <- dfi
@@ -69,14 +68,16 @@ for(i in seq_len(nrow(d))){
     cat("\n")
 }
 
-write.csv(df, file="liqi_data_tidy.csv")
-
 ## filter liqi home links
 
 dfn <- df[df$tools != "利器社群" & 
               df$tools != "赞助" & 
               df$tools != "http://liqi.io/community", ]
 dfn$links <- gsub(" 翻$", "", dfn$links)
+
+write.csv(dfn, file="liqi_data_tidy.csv")
+
+
 
 library(dplyr)
 
@@ -96,6 +97,7 @@ lqph <- dfn %>%
     summarise(toolCounts = n(), link = links[1], source = source[1]) %>%
     arrange(desc(toolCounts)) 
     
+
 View(lqph)
 
 
