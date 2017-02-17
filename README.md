@@ -1,5 +1,9 @@
 # [liqi](http://liqi.io/creators/) Data Mining
 
+
+![](./crawling_log.png)
+
+
 ## 分享达人榜 - 前20名
 
 ![](./fenxiangdaren20.png)
